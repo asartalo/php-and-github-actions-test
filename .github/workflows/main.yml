@@ -66,6 +66,11 @@ jobs:
       with:
         name: www-build
 
+    - name: Restart apache2
+      run: |
+        service apache2 restart
+        ls -la /var/www/html
+
     - name: Check files
       run: |
         ls -la
