@@ -61,8 +61,7 @@ jobs:
 
     - name: "Check files"
       run: |
-        ls -la www
-        ls -la www/assets
+        ls -la
 
     # - name: "Run PHP-Apache Docker Action"
     #   uses: "./.github/actions/php-apache"
