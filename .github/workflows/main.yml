@@ -19,8 +19,8 @@ jobs:
     - name: Check if docker ran correctly
       run: |
         docker ps -a
-        docker logs -f --until=60s docker-lms
         sleep 5
+        docker ps -a
         curl http://localhost:3030
 
     - name: Check if site runs correctly 2
