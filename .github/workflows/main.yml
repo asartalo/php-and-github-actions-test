@@ -1,0 +1,128 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    - name: "Run PHP-Apache Docker Action"
+      uses: "./.github/actions/php-apache"
+
+    - name: Check if docker ran correctly
+      run: |
+        docker ps -a
+        docker logs -f --until=60s docker-lms
+        sleep 5
+        curl http://localhost:3030
+
+    - name: Check if site runs correctly 2
+      run: |
+        sleep 30
+        docker ps -a
+        curl http://localhost:3030
+
+    - name: Setup PHP Action
+      uses: shivammathur/setup-php@2.4.1
+      with:
+        # Setup PHP version.
+        php-version: 7.4
+        # Setup PHP extensions.
+        # extensions: # optional
+        # Add values to php.ini.
+        # ini-values: # optional
+        # Setup code coverage driver.
+        # coverage: # optional
+        # Setup popular tools globally.
+        tools: composer
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.1.1
+      with:
+        # Set always-auth in npmrc
+        # always-auth: # optional, default is false
+        # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
+        node-version: 14.x
+        # Set this option if you want the action to check for the latest available version that satisfies the version spec
+        # check-latest: # optional
+        # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN
+        # registry-url: # optional
+        # Optional scope for authenticating against scoped registries
+        # scope: # optional
+        # Used to pull node distributions from node-versions.  Since there's a default, this is typically not supplied by the user.
+        # token: # optional, default is ${{ github.token }}
+
+    - name: Get composer cache directory
+      id: composercache
+      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+    - name: Cache php dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.composercache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+
+    - name: Install php dependencies
+      run: composer install --prefer-dist
+
+    - name: Cache nodejs dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Cache node-sass to skip compilation
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/node_modules/node-sass
+        key: ${{ runner.os }}-node-sass-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install nodejs dependencies
+      run: npm install
+
+    - name: Build assets
+      run: npm run build
+
+    # - name: Run docker image
+    #   run: |
+    #     docker build . -t docker-lms
+    #     date
+    #     docker run -d -p 80:80 -p 3030:3030 --name=lmstest docker-lms
+    #     sleep 5
+    #     docker ps
+    #     docker logs lmstest
+    #     curl http://localhost:3030
+
+    - name: Start Selenoid Server
+      uses: Xotabu4/selenoid-github-action@v1
+
+    - name: Run tests
+      run: ./vendor/bin/phpunit tests
+
+    # Runs a set of commands using the runners shell
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+

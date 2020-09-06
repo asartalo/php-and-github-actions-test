@@ -1,0 +1,13 @@
+name: PHP Apache test server
+description: Create a php+apache test server to run tests against
+inputs:
+  port:
+    description: The port where the server should run
+    required: false
+    default: 3030
+runs:
+  using: docker
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.port }}
+
