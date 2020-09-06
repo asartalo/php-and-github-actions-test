@@ -4,9 +4,6 @@ echo "Hello from inception server :)"
 pwd
 ls -la
 
-# sh -c "$docker_run"
-
-# cat /etc/apache2/sites-available/000-default.conf
 mkdir -p /var/www/html/uploads
 service apache2 restart
 ls -la /var/www/html

@@ -8,6 +8,7 @@ cp /entrypoint-server.sh ./entrypoint.sh
 cp /Dockerfile ./Dockerfile
 echo "After copy..."
 ls -la
+cat Dockerfile
 
 echo "Docker inception start..."
 docker build . -t lms
