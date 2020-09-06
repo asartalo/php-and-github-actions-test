@@ -49,7 +49,7 @@ jobs:
 
     steps:
     - name: "Check files"
-      run: ls -la
+      run: ls -la ${{ github.workspace }}/www/assets
 
     # - name: "Run PHP-Apache Docker Action"
     #   uses: "./.github/actions/php-apache"
