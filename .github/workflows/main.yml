@@ -70,9 +70,8 @@ jobs:
       run: |
         ls -la
 
-    - name: Check if docker ran correctly
+    - name: Check if site is accessible
       run: |
-        docker ps -a
         curl http://localhost:3030
 
     # - name: "Run PHP-Apache Docker Action"
