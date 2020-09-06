@@ -49,17 +49,24 @@ jobs:
         name: www-build
         path: www
 
-  test:
+  test-server:
     needs: build
-    runs-on: ubuntu-latest
+    container:
+      image: php:7.4-apache
+      ports: 
+				- 80
+      volumes:
+        - .:/var/www/html
+      options:
+        name: docker-lms
 
     steps:
-    - name: "Download built files"
+    - name: Download built files
       uses: actions/download-artifact@v2
       with:
         name: www-build
 
-    - name: "Check files"
+    - name: Check files
       run: |
         ls -la
 
