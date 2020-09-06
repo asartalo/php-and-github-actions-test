@@ -54,7 +54,7 @@ jobs:
     container:
       image: php:7.4-apache
       ports: 
-				- 80
+        - 80
       volumes:
         - .:/var/www/html
       options:
