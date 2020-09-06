@@ -44,12 +44,12 @@ jobs:
       run: npm run build
 
   test:
-		needs: build
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
-		- name: "Check files"
-			run: ls -la
+    - name: "Check files"
+      run: ls -la
 
     # - name: "Run PHP-Apache Docker Action"
     #   uses: "./.github/actions/php-apache"
