@@ -13,35 +13,35 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.1
-      with:
-        # Set always-auth in npmrc
-        # always-auth: # optional, default is false
-        # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
-        node-version: 14.x
-        # Set this option if you want the action to check for the latest available version that satisfies the version spec
-        # check-latest: # optional
-        # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN
-        # registry-url: # optional
-        # Optional scope for authenticating against scoped registries
-        # scope: # optional
-        # Used to pull node distributions from node-versions.  Since there's a default, this is typically not supplied by the user.
-        # token: # optional, default is ${{ github.token }}
+    # - name: Setup Node.js environment
+    #   uses: actions/setup-node@v2.1.1
+    #   with:
+    #     # Set always-auth in npmrc
+    #     # always-auth: # optional, default is false
+    #     # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
+    #     node-version: 14.x
+    #     # Set this option if you want the action to check for the latest available version that satisfies the version spec
+    #     # check-latest: # optional
+    #     # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN
+    #     # registry-url: # optional
+    #     # Optional scope for authenticating against scoped registries
+    #     # scope: # optional
+    #     # Used to pull node distributions from node-versions.  Since there's a default, this is typically not supplied by the user.
+    #     # token: # optional, default is ${{ github.token }}
 
-    - name: Cache nodejs dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+    # - name: Cache nodejs dependencies
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/.npm
+    #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-node-
 
-    - name: Install nodejs dependencies
-      run: npm install
+    # - name: Install nodejs dependencies
+    #   run: npm install
 
-    - name: Build assets
-      run: npm run build
+    # - name: Build assets
+    #   run: npm run build
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
@@ -72,7 +72,7 @@ jobs:
 
     - name: Check if site is accessible
       run: |
-        curl http://localhost
+        curl http://localhost:8080
 
     # - name: "Run PHP-Apache Docker Action"
     #   uses: "./.github/actions/php-apache"
