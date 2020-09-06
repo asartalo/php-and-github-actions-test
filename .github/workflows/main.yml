@@ -43,7 +43,7 @@ jobs:
     - name: Build assets
       run: npm run build
 
-	  - name: Copy files
+    - name: Copy files
       run: |
         cp -R ${{ github.workspace }}/www ${{ github.home }}/www
 
