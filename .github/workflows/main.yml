@@ -57,7 +57,7 @@ jobs:
       ports:
         - 80
       volumes:
-        - .:/var/www/html
+        - ${{ github.workspace }}:/var/www/html
       options: "--name docker-lms"
 
     steps:
