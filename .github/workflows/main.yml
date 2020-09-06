@@ -43,8 +43,13 @@ jobs:
     - name: Build assets
       run: npm run build
 
+	  - name: Copy files
+      run: |
+        cp -R ${{ github.workspace }}/www ${{ github.home }}/www
+
     - name: "Check files"
-      run: ls -la ${{ github.workspace }}
+      run: |
+        ls -la ${{ github.home }}/www
 
   test:
     needs: build
@@ -52,7 +57,8 @@ jobs:
 
     steps:
     - name: "Check files"
-      run: ls -la ${{ github.workspace }}
+      run: |
+        ls -la ${{ github.home }}/www
 
     # - name: "Run PHP-Apache Docker Action"
     #   uses: "./.github/actions/php-apache"
