@@ -54,12 +54,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: php:7.4-apache
-      ports: 
+      ports:
         - 80
       volumes:
         - .:/var/www/html
-      options:
-        name: docker-lms
+      options: "--name docker-lms"
 
     steps:
     - name: Download built files
