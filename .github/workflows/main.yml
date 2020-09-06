@@ -43,22 +43,26 @@ jobs:
     - name: Build assets
       run: npm run build
 
-    - name: Copy files
-      run: |
-        cp -R ${{ github.workspace }}/www $HOME/www
-
-    - name: "Check files"
-      run: |
-        ls -la $HOME/www
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: www-build
+        path: www
 
   test:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
+    - name: "Download built files"
+      uses: actions/download-artifact@v2
+      with:
+        name: www-build
+
     - name: "Check files"
       run: |
-        ls -la $HOME/www
+        ls -la www
+        ls -la www/assets
 
     # - name: "Run PHP-Apache Docker Action"
     #   uses: "./.github/actions/php-apache"
