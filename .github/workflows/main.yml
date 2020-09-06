@@ -66,6 +66,11 @@ jobs:
       with:
         name: www-build
 
+    - name: Copy files to web root
+      run: |
+        cp -R ./* /var/www/html
+        ls -la /var/www/html
+
     - name: Restart apache2
       run: |
         service apache2 restart
