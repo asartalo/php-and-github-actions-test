@@ -43,13 +43,16 @@ jobs:
     - name: Build assets
       run: npm run build
 
+    - name: "Check files"
+      run: ls -la ${{ github.workspace }}
+
   test:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
     - name: "Check files"
-      run: ls -la ${{ github.workspace }}/www/assets
+      run: ls -la ${{ github.workspace }}
 
     # - name: "Run PHP-Apache Docker Action"
     #   uses: "./.github/actions/php-apache"
