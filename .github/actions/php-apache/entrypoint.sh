@@ -4,7 +4,7 @@ echo "Port is $1"
 pwd
 
 ls -la /
-cp /entrypoint-server.sh ./entrypoint.sh
+cp /entrypoint-server.sh ./entrypoint-server.sh
 cp /Dockerfile ./Dockerfile
 echo "After copy..."
 ls -la

@@ -4,7 +4,7 @@ RUN ls -la
 
 # COPY vendor /var/www/vendor
 COPY www /var/www/html
-COPY .github/actions/php-apache/entrypoint-server.sh /entrypoint.sh
+COPY entrypoint-server.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
