@@ -51,6 +51,7 @@ jobs:
 
   test-server:
     needs: build
+    runs-on: ubuntu-latest
     container:
       image: php:7.4-apache
       ports: 
