@@ -67,12 +67,13 @@ jobs:
 
     env:
       # TEST_BASE_URL: http://localhost
-      TEST_BASE_URL: http://server
+      TEST_BASE_URL: http://testserver
       SELENIUM_HOST: http://selenium:4444/wd/hub
 
     services:
-      server:
+      testserver:
         image: php:7.4-apache
+        options: --health-cmd "curl http://testserver" --health-interval=5s
         ports: 
           - 80:80
 
