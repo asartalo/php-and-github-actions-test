@@ -60,12 +60,6 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    container:
-      image: php
-    # container:
-    #   image: php:7.4-apache
-    #   ports: 
-    #     - 80:80
 
     env:
       # TEST_BASE_URL: http://localhost
@@ -76,6 +70,8 @@ jobs:
       testserver:
         image: php:7.4-apache
         options: --health-cmd "curl http://testserver" --health-interval=5s
+        volumes: 
+          - ${{ github.workspace }}/www:/var/www/html
         ports: 
           - 80:80
 
@@ -86,6 +82,11 @@ jobs:
           - 4444:4444
 
     steps:
+    - name: Check pwd
+      run: |
+        pwd
+        ls -la
+
     - name: Check services are available
       run: |
         curl http://selenium:4444
