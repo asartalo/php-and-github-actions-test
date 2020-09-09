@@ -60,6 +60,8 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    container: 
+      image: php
 
     env:
       # TEST_BASE_URL: http://localhost
