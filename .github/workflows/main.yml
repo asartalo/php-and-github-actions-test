@@ -84,11 +84,6 @@ jobs:
           - 4444:4444
 
     steps:
-    - name: Check pwd
-      run: |
-        pwd
-        ls -la
-
     - name: Check services are available
       run: |
         curl http://selenium:4444
@@ -104,17 +99,9 @@ jobs:
         tar -xzf www-build.tar.gz
         ls -l
 
-    # - name: Copy files to web root
-    #   run: |
-    #     cp -R ./www/* /var/www/html
-
-    # - name: Restart apache server
-    #   run: service apache2 restart
-
-    # - name: Check if site is accessible
-    #   run: |
-    #     curl $TEST_BASE_URL
-    #     # curl http://localhost
+    - name: Check if site is accessible
+      run: |
+        curl $TEST_BASE_URL
 
     - name: Run Test
       run: ./vendor/bin/phpunit test
