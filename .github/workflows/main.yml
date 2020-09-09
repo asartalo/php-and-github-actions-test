@@ -64,7 +64,7 @@ jobs:
       image: php:7.4-apache
     env:
       TEST_BASE_URL: http://localhost
-      SELENIUM_HOST: http://selenium:4444/wd/hub
+      SELENIUM_HOST: http://selenium:4444
 
     services:
       selenium:
@@ -87,11 +87,7 @@ jobs:
 
     - name: Copy files to web root
       run: |
-        ls -ld /var/www/html
-        ls -la /var/www/html
         cp -R ./www/* /var/www/html
-        ls -ld /var/www/html
-        ls -la /var/www/html
 
     - name: Restart apache server
       run: service apache2 restart
