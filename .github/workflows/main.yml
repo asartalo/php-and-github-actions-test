@@ -78,10 +78,6 @@ jobs:
           - 4444:4444
 
     steps:
-    - name: Check services are available
-      run: |
-        curl http://selenium:4444
-        curl $TEST_BASE_URL
 
     - name: Extract artifacts
       run: |
@@ -90,6 +86,7 @@ jobs:
     - name: Copy files to web root
       run: |
         cp -R ./www/* /var/www/html
+
     - name: Restart apache server
       run: service apache2 restart
 
