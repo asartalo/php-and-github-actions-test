@@ -60,6 +60,8 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    container:
+      image: php
     # container:
     #   image: php:7.4-apache
     #   ports: 
