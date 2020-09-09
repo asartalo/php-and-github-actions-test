@@ -83,6 +83,10 @@ jobs:
           - 4444:4444
 
     steps:
+    - name: Check services are available
+      run: |
+        curl $TEST_BASE_URL
+        curl http://selenium:4444
  
     - name: Download built files
       uses: actions/download-artifact@v2
