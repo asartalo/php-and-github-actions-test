@@ -43,25 +43,17 @@ jobs:
     - name: Build assets
       run: npm run build
 
-    - name: Print workspace
-      run: echo "${{ github.workspace }}"
-
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
         name: www-build
         path: www
 
-  test-server:
+  test:
     needs: build
     runs-on: ubuntu-latest
     container:
       image: php:7.4-apache
-      ports:
-        - 80
-      # volumes:
-      #   - ${{ github.workspace }}:/var/www/html
-      options: "--name docker-lms"
 
     steps:
     - name: Download built files
@@ -73,35 +65,11 @@ jobs:
       run: echo "${{ github.workspace }}"
 
     - name: Copy files to web root
-      run: |
-        cp -R ./* /var/www/html
-        ls -la /var/www/html
+      run: cp -R ./* /var/www/html
 
-    - name: Restart apache2
-      run: |
-        service apache2 restart
-        ls -la /var/www/html
-
-    - name: Check files
-      run: |
-        ls -la
+    - name: Restart apache server
+      run: service apache2 restart
 
     - name: Check if site is accessible
       run: |
         curl http://localhost
-
-    # - name: "Run PHP-Apache Docker Action"
-    #   uses: "./.github/actions/php-apache"
-
-    # - name: Check if docker ran correctly
-    #   run: |
-    #     docker ps -a
-    #     sleep 5
-    #     docker ps -a
-    #     curl http://localhost:3030
-
-    # - name: Check if site runs correctly 2
-    #   run: |
-    #     sleep 30
-    #     docker ps -a
-    #     curl http://localhost:3030
