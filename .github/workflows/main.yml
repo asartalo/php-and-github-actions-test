@@ -64,10 +64,11 @@ jobs:
       image: php:7.4-apache
       ports: 
         - 80:80
+      options: --network-alias=testserver 
 
     env:
       # TEST_BASE_URL: http://localhost
-      # TEST_BASE_URL: http://testserver
+      TEST_BASE_URL: http://testserver
       SELENIUM_HOST: http://selenium:4444/wd/hub
 
     services:
@@ -84,7 +85,6 @@ jobs:
         echo job.container.id "${{ job.container.id }}"
         echo job.services.selenium.network "${{ job.services.selenium.network }}"
         echo job.services.selenium.id "${{ job.services.selenium.id }}"
-        # curl http://${{ job.container.network }}
 
     - name: Download built files
       uses: actions/download-artifact@v2
@@ -104,10 +104,10 @@ jobs:
 
     - name: Check if site is accessible
       run: |
-        # curl $TEST_BASE_URL
+        curl $TEST_BASE_URL
         # curl http://localhost
         # curl http://localhost
 
     - name: Run Test
-      run: TEST_BASE_URL=http://${{ job.container.network }} ./vendor/bin/phpunit test 
+      run: ./vendor/bin/phpunit test 
 
