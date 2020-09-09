@@ -13,49 +13,49 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Get composer cache directory
-      id: composercache
-      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+    # - name: Get composer cache directory
+    #   id: composercache
+    #   run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-    - name: Cache php dependencies
-      uses: actions/cache@v2
-      with:
-        path: ${{ steps.composercache.outputs.dir }}
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: ${{ runner.os }}-composer-
+    # - name: Cache php dependencies
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ${{ steps.composercache.outputs.dir }}
+    #     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+    #     restore-keys: ${{ runner.os }}-composer-
 
-    - name: Install php dependencies
-      run: composer install --prefer-dist
+    # - name: Install php dependencies
+    #   run: composer install --prefer-dist
 
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v2.1.1
-      with:
-        node-version: 14.x
+    # - name: Setup Node.js environment
+    #   uses: actions/setup-node@v2.1.1
+    #   with:
+    #     node-version: 14.x
 
-    - name: Cache nodejs dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+    # - name: Cache nodejs dependencies
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/.npm
+    #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-node-
 
-    - name: Install nodejs dependencies
-      run: npm install
+    # - name: Install nodejs dependencies
+    #   run: npm install
 
-    - name: Build assets
-      run: npm run build
+    # - name: Build assets
+    #   run: npm run build
 
-    - name: Prepare artifacts
-      run: |
-        tar -czvf www-build.tar.gz www vendor test 
-        ls -l
+    # - name: Prepare artifacts
+    #   run: |
+    #     tar -czvf www-build.tar.gz www vendor test 
+    #     ls -l
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: www-build
-        path: www-build.tar.gz
+    # - name: Upload artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: www-build
+    #     path: www-build.tar.gz
 
   test:
     needs: build
@@ -86,8 +86,8 @@ jobs:
     steps:
     - name: Check services are available
       run: |
-        curl $TEST_BASE_URL
         curl http://selenium:4444
+        curl http://testserver
  
     - name: Download built files
       uses: actions/download-artifact@v2
