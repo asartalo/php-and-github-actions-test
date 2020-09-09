@@ -61,7 +61,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     container: 
-			image: php:7.4-apache
+      image: php:7.4-apache
       ports: 
         - 80:80
 
