@@ -9,16 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: php:7.4-apache
-    env:
-      TEST_BASE_URL: http://localhost
-      SELENIUM_HOST: http://selenium:444
-
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        options: --health-cmd "curl http://selenium:4444" --health-interval=5s
 
     steps:
     - uses: actions/checkout@v2
@@ -34,9 +24,8 @@ jobs:
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-composer-
 
-    - uses: php-actions/composer@v2
-    # - name: Install php dependencies
-    #   run: composer install --prefer-dist
+    - name: Install php dependencies
+      run: composer install --prefer-dist
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.1.1
@@ -57,8 +46,45 @@ jobs:
     - name: Build assets
       run: npm run build
 
+    - name: Prepare artifacts
+      run: |
+        tar -czvf www-build.tar.gz www vendor test 
+        ls -l
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: www-build
+        path: www-build.tar.gz
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: php:7.4-apache
+    env:
+      TEST_BASE_URL: http://localhost
+      SELENIUM_HOST: http://selenium:444
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+        options: --health-cmd "curl http://selenium:4444" --health-interval=5s
+
+    steps:
+ 
+    - name: Download built files
+      uses: actions/download-artifact@v2
+      with:
+        name: www-build
+
+    - name: Extract artifacts
+      run: |
+        tar -xzvf www-build.tar.gz
+        ls -l
+
     - name: Copy files to web root
-      run: cp -R www /var/www/html
+      run: cp -R ./* /var/www/html
 
     - name: Restart apache server
       run: service apache2 restart
