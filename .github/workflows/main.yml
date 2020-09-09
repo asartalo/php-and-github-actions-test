@@ -13,21 +13,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Get composer cache directory
+      id: composercache
+      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+    - name: Cache php dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.composercache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+
+    - name: Install php dependencies
+      run: composer install --prefer-dist
+
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.1.1
       with:
-        # Set always-auth in npmrc
-        # always-auth: # optional, default is false
-        # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
         node-version: 14.x
-        # Set this option if you want the action to check for the latest available version that satisfies the version spec
-        # check-latest: # optional
-        # Optional registry to set up for auth. Will set the registry in a project level .npmrc and .yarnrc file, and set up auth to read in from env.NODE_AUTH_TOKEN
-        # registry-url: # optional
-        # Optional scope for authenticating against scoped registries
-        # scope: # optional
-        # Used to pull node distributions from node-versions.  Since there's a default, this is typically not supplied by the user.
-        # token: # optional, default is ${{ github.token }}
 
     - name: Cache nodejs dependencies
       uses: actions/cache@v2
@@ -54,8 +57,17 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: php:7.4-apache
+    env:
+      TEST_BASE_URL: http://localhost
+      SELENIUM_HOST: http://selenium:444
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+        options: --health-cmd "curl http://selenium:4444" --health-interval=5s
 
     steps:
+ 
     - name: Download built files
       uses: actions/download-artifact@v2
       with:
@@ -71,5 +83,8 @@ jobs:
       run: service apache2 restart
 
     - name: Check if site is accessible
-      run: |
-        curl http://localhost
+      run: curl $TEST_BASE_URL
+
+    - name: Run Test
+      run: ./vendor/bin/phpunit tests
+  
