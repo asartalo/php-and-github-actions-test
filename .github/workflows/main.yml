@@ -34,8 +34,9 @@ jobs:
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-composer-
 
-    - name: Install php dependencies
-      run: composer install --prefer-dist
+    - uses: php-actions/composer@v2
+    # - name: Install php dependencies
+    #   run: composer install --prefer-dist
 
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.1.1
