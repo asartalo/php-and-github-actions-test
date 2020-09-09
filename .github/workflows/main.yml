@@ -81,7 +81,9 @@ jobs:
     - name: Network info
       run: |
         echo "${{ job.container.network }}"
-        curl http://${{ job.container.network }}
+        echo "${{ job.container.id }}"
+        echo "${{ job.container }}"
+        # curl http://${{ job.container.network }}
 
     - name: Download built files
       uses: actions/download-artifact@v2
@@ -102,7 +104,8 @@ jobs:
     - name: Check if site is accessible
       run: |
         # curl $TEST_BASE_URL
-        curl http://localhost
+        # curl http://localhost
+        # curl http://localhost
 
     - name: Run Test
       run: TEST_BASE_URL=http://${{ job.container.network }} ./vendor/bin/phpunit test 
