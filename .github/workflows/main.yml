@@ -90,6 +90,7 @@ jobs:
         ls -ld /var/www/html
         ls -la /var/www/html
         cp -R ./www /var/www/html
+        chown -R www-data /var/www/html
         ls -ld /var/www/html
         ls -la /var/www/html
 
