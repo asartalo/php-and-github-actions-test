@@ -66,7 +66,7 @@ jobs:
         - 80:80
 
     env:
-      TEST_BASE_URL: http://localhost
+      # TEST_BASE_URL: http://localhost
       # TEST_BASE_URL: http://testserver
       SELENIUM_HOST: http://selenium:4444/wd/hub
 
@@ -78,6 +78,10 @@ jobs:
           - 4444:4444
 
     steps:
+    - name: Network info
+      run: |
+        echo "${{ job.container.network }}"
+        curl http://${{ job.container.network }}
 
     - name: Download built files
       uses: actions/download-artifact@v2
@@ -101,5 +105,5 @@ jobs:
         curl http://localhost
 
     - name: Run Test
-      run: ./vendor/bin/phpunit test 
+      run: TEST_BASE_URL=http://${{ job.container.network }} ./vendor/bin/phpunit test 
 
