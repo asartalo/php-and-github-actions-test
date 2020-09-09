@@ -80,9 +80,10 @@ jobs:
     steps:
     - name: Network info
       run: |
-        echo "${{ job.container.network }}"
-        echo "${{ job.container.id }}"
-        echo "${{ job.container }}"
+        echo job.container.network "${{ job.container.network }}"
+        echo job.container.id "${{ job.container.id }}"
+        echo job.services.selenium.network "${{ job.services.selenium.network }}"
+        echo job.services.selenium.id "${{ job.services.selenium.id }}"
         # curl http://${{ job.container.network }}
 
     - name: Download built files
