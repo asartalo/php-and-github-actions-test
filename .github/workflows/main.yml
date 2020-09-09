@@ -60,17 +60,24 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    container:
-      image: php:7.4-apache
-      ports: 
-        - 80:80
+    # container:
+    #   image: php:7.4-apache
+    #   ports: 
+    #     - 80:80
 
     env:
       # TEST_BASE_URL: http://localhost
-      TEST_BASE_URL: http://test
+      TEST_BASE_URL: http://server
       SELENIUM_HOST: http://selenium:4444/wd/hub
 
     services:
+      server:
+        options: 
+				image: php:7.4-apache
+				ports: 
+					- 80:80
+						- 4444:4444
+
       selenium:
         image: selenium/standalone-chrome
         options: --health-cmd "curl http://selenium:4444" --health-interval=5s
@@ -89,17 +96,17 @@ jobs:
         tar -xzf www-build.tar.gz
         ls -l
 
-    - name: Copy files to web root
-      run: |
-        cp -R ./www/* /var/www/html
+    # - name: Copy files to web root
+    #   run: |
+    #     cp -R ./www/* /var/www/html
 
-    - name: Restart apache server
-      run: service apache2 restart
+    # - name: Restart apache server
+    #   run: service apache2 restart
 
-    - name: Check if site is accessible
-      run: |
-        # curl $TEST_BASE_URL
-        curl http://localhost
+    # - name: Check if site is accessible
+    #   run: |
+    #     curl $TEST_BASE_URL
+    #     # curl http://localhost
 
     - name: Run Test
       run: ./vendor/bin/phpunit test
