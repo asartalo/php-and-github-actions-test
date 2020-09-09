@@ -9,6 +9,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: php:7.4-apache
+    env:
+      TEST_BASE_URL: http://localhost
+      SELENIUM_HOST: http://selenium:444
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+        options: --health-cmd "curl http://selenium:4444" --health-interval=5s
 
     steps:
     - uses: actions/checkout@v2
@@ -46,41 +56,8 @@ jobs:
     - name: Build assets
       run: npm run build
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: www-build
-        path: |
-          www
-          vendor
-          test
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    container:
-      image: php:7.4-apache
-    env:
-      TEST_BASE_URL: http://localhost
-      SELENIUM_HOST: http://selenium:444
-
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        options: --health-cmd "curl http://selenium:4444" --health-interval=5s
-
-    steps:
- 
-    - name: Download built files
-      uses: actions/download-artifact@v2
-      with:
-        name: www-build
-
-    - name: Print workspace
-      run: echo "${{ github.workspace }}"
-
     - name: Copy files to web root
-      run: cp -R ./* /var/www/html
+      run: cp -R www /var/www/html
 
     - name: Restart apache server
       run: service apache2 restart
