@@ -61,22 +61,16 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     container: 
-      image: php
+			image: php:7.4-apache
+			ports: 
+				- 80:80
 
     env:
-      # TEST_BASE_URL: http://localhost
-      TEST_BASE_URL: http://testserver
+      TEST_BASE_URL: http://localhost
+      # TEST_BASE_URL: http://testserver
       SELENIUM_HOST: http://selenium:4444/wd/hub
 
     services:
-      testserver:
-        image: php:7.4-apache
-        options: --health-cmd "curl http://testserver" --health-interval=5s
-        volumes: 
-          - ${{ github.workspace }}/www:/var/www/html
-        ports: 
-          - 80:80
-
       selenium:
         image: selenium/standalone-chrome
         options: --health-cmd "curl http://selenium:4444" --health-interval=5s
@@ -88,21 +82,22 @@ jobs:
       run: |
         curl http://selenium:4444
         curl $TEST_BASE_URL
- 
-    - name: Download built files
-      uses: actions/download-artifact@v2
-      with:
-        name: www-build
 
     - name: Extract artifacts
       run: |
         tar -xzf www-build.tar.gz
         ls -l
+    - name: Copy files to web root
+      run: |
+        cp -R ./www/* /var/www/html
+    - name: Restart apache server
+      run: service apache2 restart
 
     - name: Check if site is accessible
       run: |
-        curl $TEST_BASE_URL
+        # curl $TEST_BASE_URL
+        curl http://localhost
 
     - name: Run Test
-      run: ./vendor/bin/phpunit test
-  
+      run: ./vendor/bin/phpunit test 
+
