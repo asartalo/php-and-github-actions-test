@@ -97,7 +97,9 @@ jobs:
       run: service apache2 restart
 
     - name: Check if site is accessible
-      run: curl $TEST_BASE_URL
+      run: |
+        # curl $TEST_BASE_URL
+        curl http://localhost
 
     - name: Run Test
       run: ./vendor/bin/phpunit test
