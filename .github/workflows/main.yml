@@ -79,6 +79,11 @@ jobs:
 
     steps:
 
+    - name: Download built files
+      uses: actions/download-artifact@v2
+      with:
+        name: www-build
+
     - name: Extract artifacts
       run: |
         tar -xzf www-build.tar.gz
