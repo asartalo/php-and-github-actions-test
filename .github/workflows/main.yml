@@ -62,8 +62,8 @@ jobs:
     runs-on: ubuntu-latest
     container: 
 			image: php:7.4-apache
-			ports: 
-				- 80:80
+      ports: 
+        - 80:80
 
     env:
       TEST_BASE_URL: http://localhost
