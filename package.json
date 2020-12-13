@@ -37,7 +37,7 @@
     "file-loader": "^1.1.6",
     "fs-extra": "^5.0.0",
     "kool-shell": "^2.1.0",
-    "node-sass": "^4.7.2",
+    "node-sass": "^4.13.1",
     "postcss-loader": "^2.0.10",
     "progress-bar-webpack-plugin": "^1.10.0",
     "resolve-url-loader": "^2.2.1",
